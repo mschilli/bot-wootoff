@@ -1,3 +1,4 @@
+^adm/
 blib
 ^Makefile$
 ^Makefile.old$

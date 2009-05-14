@@ -6,8 +6,14 @@
 use warnings;
 use strict;
 
-use Test::More qw(no_plan);
-BEGIN { use_ok('Bot::WootOff') };
+use Test::More;
+
+plan tests => 2;
+
+use Bot::WootOff;
+
+my $bot = Bot::WootOff->new(spawn => 0);
+
+is $bot->{irc_server}, "irc.freenode.net";
 
 ok(1);
-like("123", qr/^\d+$/);
