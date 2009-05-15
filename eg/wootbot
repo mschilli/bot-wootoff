@@ -27,7 +27,7 @@ __END__
 
 =head1 NAME
 
-    wootbot - blah blah blah
+    wootbot - Poll woot.com send updates to IRC
 
 =head1 SYNOPSIS
 
@@ -43,14 +43,15 @@ IRC server to connect to.
 
 =item B<-c>
 
-IRC chanell to post messages to.
+IRC channel to post messages to.
 
 =back
 
 =head1 DESCRIPTION
 
-c<wootbot> periocally polls woot.com during a woot-off and sends messages
-to a channel on an IRC server if the next item is up for grabs.
+c<wootbot> periocally polls woot.com (especially useful during a woot-off)
+and sends messages to a channel on an IRC server if the next item is 
+up for grabs. Check the Bot::WootOff documentation for details.
 
 =head1 EXAMPLES
 

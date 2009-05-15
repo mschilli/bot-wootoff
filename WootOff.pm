@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 ###########################################
 sub new {

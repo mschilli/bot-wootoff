@@ -1,5 +1,9 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.02  2009/05/15
+    (ms) Added documentation on eg/wootoff.
+    (ms) Added pseudo subclass Bot::Woot to help the CPAN search engine.
+
 0.01  2009/05/13
-      * Where it all began.
+    (ms) Where it all began.
