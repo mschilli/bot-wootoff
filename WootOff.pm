@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 ###########################################
 sub new {
@@ -131,16 +131,6 @@ use base qw( Bot::BasicBot );
 use Log::Log4perl qw(:easy);
 
 #$^W = undef;
-
-###########################################
-sub said {
-###########################################
-  my($self, $mesg) = @_;
-
-  INFO "Said: $mesg->{body}";
-
-  return "Quiet, please. I'm the one making the announcements here.";
-}
 
 1;
 
