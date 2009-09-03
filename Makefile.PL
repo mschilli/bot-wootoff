@@ -10,7 +10,7 @@ WriteMakefile(
         Log::Log4perl                => 1.0,
         Bot::BasicBot                => 0.81,
         HTTP::Request::Common        => 0,
-        POE                          => 1,
+        POE                          => 0.99,
         POE::Component::Client::HTTP => 0,
     },
     'EXE_FILES'     => ['eg/wootbot'],

@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 
 ###########################################
 sub new {
@@ -77,19 +77,21 @@ sub spawn {
         my $resp= $_[ARG1]->[0];
         if($resp->is_success()) {
           my $text = $resp->content();;
-          if($text =~ m#<h2>(.*?)</h2>\s+<h3>\$(.*?)</h3>#s) {
-            if($last_item ne $1) {
-              my $item  = $1;
-              my $price = $2;
+
+          my($item, $price) = $self->html_scrape($text);
+
+          if(! defined $item) {
+              LOGDIE "Ouch, woot.com changed their HTML, and our ",
+                     "scraper failed. Let the module author know!";
+          }
+
+          if($last_item ne $item) {
               $last_item = $item;
               $self->{bot}->say(channel => $self->{irc_channel}, 
-                body => "$item $price $self->{http_url}");
+                      body => "$item $price $self->{http_url}");
               INFO "$1 posted to $self->{irc_channel}";
-            } else {
-              DEBUG "Nothing changed";
-            }
           } else {
-            print "no match\n";
+              DEBUG "Nothing changed";
           }
 
         } else {
@@ -99,6 +101,30 @@ sub spawn {
       },
     }
   );
+}
+
+###########################################
+sub html_scrape {
+###########################################
+    my($self, $html) = @_;
+
+      # Finds the item and its price in the woot.com HTML page
+    my($item, $price);
+
+    if($html =~ m#class="fn">(.*?)</.*?class="amount">(.*?)</#s) {
+        ($item, $price) = ($1, $2);
+    } elsif( $html =~ m#<h2>(.*?)</h2>\s+<h3>\$(.*?)</h3>#s) {
+          # fall back on legacy format
+        ($item, $price) = ($1, $2);
+    }
+
+    if(defined $item) {
+        $item =~ s/\s+/ /g;
+        return ($item, $price);
+    }
+
+    WARN "Cannot parse woot HTML";
+    return undef;
 }
 
 ###########################################

@@ -1,6 +1,10 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.04  2009/08/03
+    (ms) Adapted woot scraper, thanks to Noel Rosenberg for the 
+         heads-up.
+
 0.03  2009/07/22
     (ms) Removed said() method to prevent bot from responding to 
          messages in the channel.
