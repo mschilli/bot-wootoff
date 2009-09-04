@@ -1,7 +1,11 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
-0.04  2009/08/03
+0.05  2009/09/03
+    (ms) Fixed eg/wootbot parameter parsing
+    (ms) Fixed 'uninitialized' warning in WootOff.pm
+
+0.04  2009/09/03
     (ms) Adapted woot scraper, thanks to Noel Rosenberg for the 
          heads-up.
 

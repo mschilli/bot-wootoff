@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
 ###########################################
 sub new {
@@ -89,7 +89,7 @@ sub spawn {
               $last_item = $item;
               $self->{bot}->say(channel => $self->{irc_channel}, 
                       body => "$item $price $self->{http_url}");
-              INFO "$1 posted to $self->{irc_channel}";
+              INFO "$item \$$price posted to $self->{irc_channel}";
           } else {
               DEBUG "Nothing changed";
           }
