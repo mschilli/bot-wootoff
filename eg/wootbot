@@ -9,7 +9,7 @@ use Getopt::Std;
 use Bot::WootOff;
 use Log::Log4perl qw(:easy);
 
-getopts("hv", \my %opts);
+getopts("hvs:c:", \my %opts);
 
 Log::Log4perl->easy_init({
     level => ($opts{v} ? $DEBUG : $ERROR),
