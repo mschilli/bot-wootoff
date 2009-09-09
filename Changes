@@ -1,6 +1,10 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.06  (not yet released)
+    (ms) Added LIVE_TESTS and eg/woot-scraper to detect woot.com 
+         HTML changes early.
+
 0.05  2009/09/03
     (ms) Fixed eg/wootbot parameter parsing
     (ms) Fixed 'uninitialized' warning in WootOff.pm

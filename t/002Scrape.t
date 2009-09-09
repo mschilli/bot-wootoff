@@ -24,6 +24,7 @@ for my $file (qw(woot-20090903.html woot-legacy.html)) {
 
 }
 
+
 sub slurp {
     my($file) = @_;
     open FILE, "<$file" or die $!;

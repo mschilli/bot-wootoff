@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 
 ###########################################
 sub new {
@@ -20,10 +20,8 @@ sub new {
     irc_server    => "irc.freenode.net",
     irc_channel   => "#wootoff" . sprintf("%04d", int(rand(1000))),
     irc_nick      => "wootbot",
-    http_agent    => (__PACKAGE__ . "/" . $VERSION),
     http_alias    => "wootoff-ua",
     http_timeout  => 60,
-    http_url      => "http://www.woot.com",
     poll_interval => 30,
     Alias         => "wootoff-bot",
     spawn         => 1,
@@ -32,10 +30,29 @@ sub new {
 
   bless $self, $class;
 
+  $self->{http_agent} = $self->agent() unless defined $self->{http_agent};
+  $self->{http_url}   = $self->woot_url() unless defined $self->{http_url};
+
   # Start it up automatically.
   $self->spawn() if $self->{spawn};
 
   return $self;
+}
+
+###########################################
+sub woot_url {
+###########################################
+    my($self) = @_;
+
+    return "http://www.woot.com";
+}
+
+###########################################
+sub agent {
+###########################################
+    my($self) = @_;
+
+    return(__PACKAGE__ . "/" . $VERSION),
 }
 
 ###########################################
@@ -101,6 +118,51 @@ sub spawn {
       },
     }
   );
+}
+
+###########################################
+sub scraper_test {
+###########################################
+    my($self) = @_;
+
+    require LWP::UserAgent;
+    my $ua = LWP::UserAgent->new();
+    $ua->agent( $self->agent() );
+    $self->error("");
+
+    my $response = $ua->get( $self->woot_url() );
+
+    if( $response->is_success() ) {
+        my $bot = Bot::WootOff->new(spawn => 0);
+
+        my($item, $price) = $bot->html_scrape( $response->content() );
+        if(!defined $price) {
+            $self->error("Scraper failed -- please notify the author");
+            return undef;
+        } else {
+            INFO "Scraper successfully got item and price";
+            INFO "Item: [$item] Price: [$price]";
+            return($item, $price);
+        }
+    }
+
+    $self->error("Fetching woot.com page failed: ", $response->message());
+    return undef;
+}
+
+###########################################
+sub error {
+###########################################
+    my($self, @text) = @_;
+
+    if(scalar @text) {
+        $self->{error} = join ' ', @text;
+        if(length $self->{error}) {
+            ERROR $self->{error};
+        }
+    }
+
+    return $self->{error};
 }
 
 ###########################################
