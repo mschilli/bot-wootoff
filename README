@@ -66,6 +66,10 @@ DESCRIPTION
     clients like Pidgin in a clickable format, so that you can reach the
     current offer with a single mouse click.
 
+    If someone in the channel says "!woot" then the bot will repeat its last
+    message. This is helpful if someone just joined the channel and wants to
+    know what the current item is.
+
     All you have to do to receive these message is use an IRC client like
     Pidgin, connect to the IRC server specified (irc.freenode.net by
     default), log into the channel specified (#wootoffxxxx by default, where

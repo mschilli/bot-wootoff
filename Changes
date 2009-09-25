@@ -1,9 +1,11 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
-0.06  (not yet released)
+0.06  2009/09/24
     (ms) Added LIVE_TESTS and eg/woot-scraper to detect woot.com 
          HTML changes early.
+    (ms) Added "!woot" command to give channel participants the 
+         opportunity to have the bot repeat its last message.
 
 0.05  2009/09/03
     (ms) Fixed eg/wootbot parameter parsing

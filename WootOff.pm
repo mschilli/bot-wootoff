@@ -25,6 +25,7 @@ sub new {
     poll_interval => 30,
     Alias         => "wootoff-bot",
     spawn         => 1,
+    last_msg      => undef,
     %options,
   };
 
@@ -93,7 +94,7 @@ sub spawn {
       http_ready => sub {
         my $resp= $_[ARG1]->[0];
         if($resp->is_success()) {
-          my $text = $resp->content();;
+          my $text = $resp->content();
 
           my($item, $price) = $self->html_scrape($text);
 
@@ -104,15 +105,20 @@ sub spawn {
 
           if($last_item ne $item) {
               $last_item = $item;
+              my $body = "$item $price $self->{http_url}";
               $self->{bot}->say(channel => $self->{irc_channel}, 
-                      body => "$item $price $self->{http_url}");
+                                body    => $body);
+              $self->{bot}->{last_msg} = $body;
               INFO "$item \$$price posted to $self->{irc_channel}";
           } else {
               DEBUG "Nothing changed";
           }
 
         } else {
-          print $resp->message();
+          if(defined $resp->code()) {
+              ERROR "HTTP fetch failed with code: ", $resp->code(),
+               (defined $resp->message() ? $resp->message() : "");
+          }
         }
         $poe_kernel->delay("http_start", $self->{poll_interval} );
       },
@@ -218,7 +224,19 @@ use Bot::BasicBot;
 use base qw( Bot::BasicBot );
 use Log::Log4perl qw(:easy);
 
-#$^W = undef;
+###########################################
+sub said {
+###########################################
+    my($self, $msg) = @_;
+
+      # If someone says "!woot", repeat the last message
+    if($msg->{body} =~ /^!woot/) {
+        return $self->{last_msg} if defined $self->{last_msg};
+    }
+
+      # remain mum otherwise
+    return "";
+}
 
 1;
 
@@ -290,6 +308,10 @@ messages will look like
 Each message contains a link to woot.com, which will be displayed by IRC
 clients like Pidgin in a clickable format, so that you can reach the 
 current offer with a single mouse click.
+
+If someone in the channel says "!woot" then the bot will repeat its last
+message. This is helpful if someone just joined the channel and wants
+to know what the current item is.
 
 All you have to do to receive these message is use an IRC client like 
 Pidgin, connect to the IRC server specified (irc.freenode.net by default),
