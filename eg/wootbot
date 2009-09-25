@@ -9,7 +9,7 @@ use Getopt::Std;
 use Bot::WootOff;
 use Log::Log4perl qw(:easy);
 
-getopts("hvs:c:", \my %opts);
+getopts("hvs:c:n:", \my %opts);
 
 Log::Log4perl->easy_init({
     level => ($opts{v} ? $DEBUG : $ERROR),
@@ -19,6 +19,7 @@ Log::Log4perl->easy_init({
 my $bot = Bot::WootOff->new(
     $opts{s} ? (irc_server  => $opts{s}) : (),
     $opts{c} ? (irc_channel => $opts{c}) : (),
+    $opts{n} ? (irc_nick    => $opts{n}) : (),
 );
 
 $bot->run();
@@ -44,6 +45,10 @@ IRC server to connect to.
 =item B<-c>
 
 IRC channel to post messages to.
+
+=item B<-n>
+
+Nick name of the bot, defaults to "wootbot"
 
 =back
 
