@@ -88,16 +88,17 @@ DESCRIPTION
         The constructor takes the following arguments:
 
             my $bot = Bot::WootOff->new(
-              irc_server    => "irc.freenode.net",
-              irc_channel   => "#wootoff",
-              irc_nick      => "wootbot",
-              http_agent    => (__PACKAGE__ . "/" . $VERSION),
-              http_alias    => "wootoff-ua",
-              http_timeout  => 60,
-              http_url      => "http://www.woot.com",
-              poll_interval => 30,
-              Alias         => "wootoff-bot",
-              spawn         => 1,
+              irc_server       => "irc.freenode.net",
+              irc_channel      => "#wootoff",
+              irc_nick         => "wootbot",
+              http_agent       => (__PACKAGE__ . "/" . $VERSION),
+              http_alias       => "wootoff-ua",
+              http_timeout     => 60,
+              http_url         => "http://www.woot.com",
+              http_max_retries => 30,
+              poll_interval    => 30,
+              Alias            => "wootoff-bot",
+              spawn            => 1,
             );
 
         Some of these parameters are specific to POE, the framework driving

@@ -1,6 +1,12 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.07  (not yet released)
+    (ms) If the scraper fails, it now logs the HTML to /tmp/woot.html.
+    (ms) Since woot.com often suffers brief outages during a wootoff,
+         http_max_retries now sets 30 HTTP fetches of HTML we can't 
+         parse before we give up.
+
 0.06  2009/09/24
     (ms) Added LIVE_TESTS and eg/woot-scraper to detect woot.com 
          HTML changes early.

@@ -17,15 +17,16 @@ sub new {
   my($class, %options) = @_;
 
   my $self = {
-    irc_server    => "irc.freenode.net",
-    irc_channel   => "#wootoff" . sprintf("%04d", int(rand(1000))),
-    irc_nick      => "wootbot",
-    http_alias    => "wootoff-ua",
-    http_timeout  => 60,
-    poll_interval => 30,
-    Alias         => "wootoff-bot",
-    spawn         => 1,
-    last_msg      => undef,
+    irc_server       => "irc.freenode.net",
+    irc_channel      => "#wootoff" . sprintf("%04d", int(rand(1000))),
+    irc_nick         => "wootbot",
+    http_alias       => "wootoff-ua",
+    http_timeout     => 60,
+    http_max_retries => 30,
+    poll_interval    => 30,
+    Alias            => "wootoff-bot",
+    spawn            => 1,
+    last_msg         => undef,
     %options,
   };
 
@@ -92,6 +93,8 @@ sub spawn {
       },
 
       http_ready => sub {
+        my $retries = 0;
+
         my $resp= $_[ARG1]->[0];
         if($resp->is_success()) {
           my $text = $resp->content();
@@ -99,9 +102,32 @@ sub spawn {
           my($item, $price) = $self->html_scrape($text);
 
           if(! defined $item) {
-              LOGDIE "Ouch, woot.com changed their HTML, and our ",
-                     "scraper failed. Let the module author know!";
+              my $save_file = "/tmp/woot.html";
+
+              if(open FILE, ">$save_file") {
+                  print FILE $text;
+                  close FILE;
+              } else {
+                 LOGWARN "Can't open $save_file ($!)";
+              }
+
+              if($self->{http_retries_performed} == 
+                 $self->{http_max_retries}) {
+                  LOGDIE "Ouch, woot.com changed their HTML, and our ",
+                         "scraper failed (saved in $save_file). " ,
+                         "Let the module author know!";
+              } else {
+                  ERROR "Scraper failed to parse HTML, but ",
+                        "retrying (", 
+                        $self->{http_retries_performed} + 1,
+                        "/",
+                        $self->{http_max_retries},
+                        ")";
+                  $self->{http_retries_performed}++;
+              }
           }
+
+          $self->{http_retries_performed} = 0;
 
           if($last_item ne $item) {
               $last_item = $item;
@@ -117,6 +143,7 @@ sub spawn {
         } else {
           if(defined $resp->code()) {
               ERROR "HTTP fetch failed with code: ", $resp->code(),
+               " ",
                (defined $resp->message() ? $resp->message() : "");
           }
         }
@@ -335,16 +362,17 @@ current window.
 The constructor takes the following arguments:
 
     my $bot = Bot::WootOff->new(
-      irc_server    => "irc.freenode.net",
-      irc_channel   => "#wootoff",
-      irc_nick      => "wootbot",
-      http_agent    => (__PACKAGE__ . "/" . $VERSION),
-      http_alias    => "wootoff-ua",
-      http_timeout  => 60,
-      http_url      => "http://www.woot.com",
-      poll_interval => 30,
-      Alias         => "wootoff-bot",
-      spawn         => 1,
+      irc_server       => "irc.freenode.net",
+      irc_channel      => "#wootoff",
+      irc_nick         => "wootbot",
+      http_agent       => (__PACKAGE__ . "/" . $VERSION),
+      http_alias       => "wootoff-ua",
+      http_timeout     => 60,
+      http_url         => "http://www.woot.com",
+      http_max_retries => 30,
+      poll_interval    => 30,
+      Alias            => "wootoff-bot",
+      spawn            => 1,
     );
 
 Some of these parameters are specific to POE, the framework driving the
