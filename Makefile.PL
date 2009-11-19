@@ -3,6 +3,14 @@
 # 2009, Mike Schilli <cpan@perlmeister.com>
 ######################################################################
 use ExtUtils::MakeMaker;
+
+my $meta_merge = {
+    META_MERGE => {
+        resources => {
+            repository  => 'http://github.com/mschilli/bot-wootoff',
+        },
+    }
+};
 WriteMakefile(
     'NAME'         => 'Bot::WootOff',
     'VERSION_FROM' => 'WootOff.pm', # finds $VERSION
@@ -14,11 +22,7 @@ WriteMakefile(
         POE::Component::Client::HTTP => 0,
     },
     'EXE_FILES'     => ['eg/wootbot'],
-    META_MERGE          => {
-        resources       => {
-            repository  => 'http://github.com/mschilli/bot-wootoff',
-        },
-    },
+    $ExtUtils::MakeMaker::VERSION >= 6.50 ? (%$meta_merge) : (),
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM => 'WootOff.pm',
        AUTHOR     => 'Mike Schilli <cpan@perlmeister.com>') : ()),
