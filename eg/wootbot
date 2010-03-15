@@ -9,7 +9,7 @@ use Getopt::Std;
 use Bot::WootOff;
 use Log::Log4perl qw(:easy);
 
-getopts("hvs:c:n:", \my %opts);
+getopts("hvs:c:n:u:", \my %opts);
 
 Log::Log4perl->easy_init({
     level => ($opts{v} ? $DEBUG : $ERROR),
@@ -20,6 +20,7 @@ my $bot = Bot::WootOff->new(
     $opts{s} ? (irc_server  => $opts{s}) : (),
     $opts{c} ? (irc_channel => $opts{c}) : (),
     $opts{n} ? (irc_nick    => $opts{n}) : (),
+    $opts{u} ? (http_url    => $opts{u}) : (),
 );
 
 $bot->run();
@@ -49,6 +50,11 @@ IRC channel to post messages to.
 =item B<-n>
 
 Nick name of the bot, defaults to "wootbot"
+
+=item B<-u>
+
+Woot URL to use. Defaults to "http://woot.com", but in case you want to 
+trail the happy hour, use "-u http://woot.com/happyhour" instead.
 
 =back
 
