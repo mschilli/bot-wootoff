@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+###########################################
+# release -- Release this module
+###########################################
+use warnings;
+use strict;
+
+    # Available at http://perlmeister.com/scripts
+use ModDevUtils;
+
+{
+    no strict;
+    *ModDevUtils::main_pm_file = sub { "WootOff.pm" };
+}
+
+ModDevUtils::release() or exit 0;

@@ -208,6 +208,8 @@ sub html_scrape {
 
     if($html =~ m#class="fn">(.*?)</.*?class="amount">(.*?)</#s) {
         ($item, $price) = ($1, $2);
+    } elsif($html =~ m#class="fn">(.*?)</.*?class="price">\$(.*?)</#s) {
+        ($item, $price) = ($1, $2);
     } elsif( $html =~ m#<h2>(.*?)</h2>\s+<h3>\$(.*?)</h3>#s) {
           # fall back on legacy format
         ($item, $price) = ($1, $2);
@@ -383,13 +385,15 @@ bot.
 This methods starts the bot, which usually runs until the program is
 terminated.
 
+=back
+
 =head1 EXAMPLES
 
   $ wootbot -s irc.freenode.net -c '#wootoff'
 
 =head1 LEGALESE
 
-Copyright 2009 by Mike Schilli, all rights reserved.
+Copyright 2009-2012 by Mike Schilli, all rights reserved.
 This program is free software, you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

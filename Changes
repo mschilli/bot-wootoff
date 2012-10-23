@@ -1,6 +1,9 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.08  (2012/10/22)
+    (ms) Adapted to new wootoff page layout.
+
 0.07  (2010/03/15)
     (ms) Added -u option to specify woot happyhour URL or similar.
     (ms) If the scraper fails, it now logs the HTML to /tmp/woot.html.

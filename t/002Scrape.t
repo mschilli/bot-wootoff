@@ -7,7 +7,7 @@ use warnings;
 use strict;
 
 use Test::More;
-plan tests => 4;
+plan tests => 6;
 
 my $canned_dir = "t/canned";
 $canned_dir = "../$canned_dir" unless -d $canned_dir;
@@ -16,7 +16,7 @@ use Bot::WootOff;
 
 my $bot = Bot::WootOff->new(spawn => 0);
 
-for my $file (qw(woot-20090903.html woot-legacy.html)) {
+for my $file (qw(woot-20121022.html woot-20090903.html woot-legacy.html)) {
     my($item, $price) = $bot->html_scrape( slurp("$canned_dir/$file") );
 
     is $item, "Some product with some description", "item parsed";
