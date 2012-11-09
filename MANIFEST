@@ -12,6 +12,7 @@ t/002Scrape.t
 t/003Live.t
 t/canned/woot-20090903.html
 t/canned/woot-20121022.html
+t/canned/woot-20121108.html
 t/canned/woot-legacy.html
 Woot.pm
 WootOff.pm
