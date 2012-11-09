@@ -7,7 +7,7 @@ use warnings;
 use strict;
 
 use Test::More;
-plan tests => 6;
+plan tests => 8;
 
 my $canned_dir = "t/canned";
 $canned_dir = "../$canned_dir" unless -d $canned_dir;
@@ -24,6 +24,10 @@ for my $file (qw(woot-20121022.html woot-20090903.html woot-legacy.html)) {
 
 }
 
+my($item, $price) = 
+    $bot->html_scrape( slurp("$canned_dir/woot-20121108.html") );
+is $item, "TDK Boombox", "item";
+is $price, "139.99 - 219.99", "price";
 
 sub slurp {
     my($file) = @_;

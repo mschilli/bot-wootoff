@@ -1,6 +1,9 @@
 ######################################################################
 Revision history for Perl extension Bot::WootOff
 
+0.09  (2012/11/08)
+    (ms) [rt.cpan.org #80699] Scraper now detects price ranges as well.
+
 0.08  (2012/10/22)
     (ms) Adapted to new wootoff page layout.
 

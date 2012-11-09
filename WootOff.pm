@@ -9,7 +9,7 @@ use HTTP::Request::Common qw(GET);
 use POE qw(Component::Client::HTTP);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = "0.08";
+our $VERSION = "0.09";
 
 ###########################################
 sub new {
@@ -171,6 +171,8 @@ sub scraper_test {
         my($item, $price) = $bot->html_scrape( $response->content() );
         if(!defined $price) {
             $self->error("Scraper failed -- please notify the author");
+            # use Sysadm::Install qw( :all );
+            # blurt $response->content(), "test.html";
             return undef;
         } else {
             INFO "Scraper successfully got item and price";
@@ -213,6 +215,16 @@ sub html_scrape {
     } elsif( $html =~ m#<h2>(.*?)</h2>\s+<h3>\$(.*?)</h3>#s) {
           # fall back on legacy format
         ($item, $price) = ($1, $2);
+    } elsif($html =~ m#class="title">(.*?)</#) {
+          # min/max price ranges
+        $item = $1;
+        my @prices = ();
+
+        while( $html =~ m#class="price.*?">\$(.*?)</#g) {
+            push @prices, $1;
+        }
+
+        $price = join " - ", @prices;
     }
 
     if(defined $item) {
